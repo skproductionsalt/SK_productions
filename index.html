@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK PRODUCTIONS | Creative Services Quotation for MKB Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --primary-gold: #F5C544;
+            --dark-background: #101010;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-background);
+            background-image: radial-gradient(at 0% 0%, #1a1a1a 0%, #000000 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            letter-spacing: 0.02em;
+            line-height: 1.7;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+            will-change: transform, box-shadow;
+        }
+
+        /* Subtle Hover Effect for Main Cards */
+        .glass-card:hover {
+            transform: translateY(-5px) scale(1.005);
+            box-shadow: 0 10px 30px 0 rgba(245, 197, 68, 0.3);
+        }
+
+        .gold-text { color: var(--primary-gold); }
+        .gold-divider { background-color: var(--primary-gold); }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(16, 16, 16, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            letter-spacing: 0.05em;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 68, 0.5); }
+            50% { box-shadow: 0 0 0 15px rgba(245, 197, 68, 0); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .animate-pulse-gold {
+            animation: pulse-gold 2s infinite ease-in-out;
+        }
+
+        /* Custom Button Style */
+        .cta-button {
+            background-image: linear-gradient(135deg, #FFD700 0%, #F5C544 50%, #B8860B 100%);
+            color: #101010;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px rgba(245, 197, 68, 0.6);
+        }
+
+        .copy-button {
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+
+        /* Custom Scrollbar for Bank List */
+        .bank-list-container {
+            max-height: 400px; /* Limit height for mobile view */
+            overflow-y: auto;
+        }
+        .bank-list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .bank-list-container::-webkit-scrollbar-thumb {
+            background-color: rgba(245, 197, 68, 0.3);
+            border-radius: 10px;
+        }
+        .bank-list-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'brand-gold': '#F5C544' },
+                }
+            }
+        }
+        
+        const ADVANCE_AMOUNT = "55,000 /-"; // 50% of 110,000
+
+        // Comprehensive list of bank accounts (Updated to only include Meezan accounts)
+        const BANK_ACCOUNTS = [
+            {
+                bankName: "Meezan Bank (MDC)",
+                accountTitle: "SYEDA WAJIHA HASAN",
+                accountNumber: "00300109798270",
+                iban: "PK28MEZN0000300109798270"
+            },
+            {
+                bankName: "Meezan Bank",
+                accountTitle: "SYED HASEEB ALI",
+                accountNumber: "00300113073625",
+                iban: "PK52MEZN0000300113073625"
+            }
+        ];
+
+        // Renders the list of bank accounts dynamically into the modal
+        function renderBankDetails() {
+            const container = document.getElementById('bank-accounts-container');
+            container.innerHTML = ''; // Clear previous content
+            
+            BANK_ACCOUNTS.forEach((account, index) => {
+                // Using unique IDs for each account number and IBAN display element
+                const acctNumId = `acct-num-${index}`;
+                const ibanId = `iban-${index}`;
+
+                const itemHtml = `
+                    <div class="space-y-3 p-4 bg-white/5 rounded-lg border border-white/10">
+                        <p class="text-base font-bold gold-text">${account.accountTitle}</p>
+                        <p class="text-sm text-gray-400 mb-2">${account.bankName}</p>
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-white/10 pt-2">
+                            <div class="flex flex-col sm:w-2/3">
+                                <span class="font-medium text-gray-400 text-xs uppercase tracking-wider">Account Number:</span>
+                                <span id="${acctNumId}" class="font-mono text-sm text-white break-all">${account.accountNumber}</span>
+                            </div>
+                            <button onclick="copyToClipboard('${acctNumId}')" class="copy-button bg-brand-gold/20 text-brand-gold hover:bg-brand-gold/30 rounded-full py-1 px-4 text-xs mt-2 sm:mt-0 sm:ml-4">
+                                Copy Acct.
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-t border-white/10 pt-2">
+                            <div class="flex flex-col sm:w-2/3">
+                                <span class="font-medium text-gray-400 text-xs uppercase tracking-wider">IBAN:</span>
+                                <span id="${ibanId}" class="font-mono text-sm text-white break-all">${account.iban}</span>
+                            </div>
+                            <button onclick="copyToClipboard('${ibanId}')" class="copy-button bg-brand-gold/20 text-brand-gold hover:bg-brand-gold/30 rounded-full py-1 px-4 text-xs mt-2 sm:mt-0 sm:ml-4">
+                                Copy IBAN
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHtml;
+            });
+        }
+        
+        // --- Modal Control Functions ---
+        function showModal() {
+            const modal = document.getElementById('confirmation-modal');
+            const confirmationStage = document.getElementById('modal-confirmation-stage');
+            const paymentStage = document.getElementById('modal-payment-stage');
+            
+            // Reset to confirmation stage
+            confirmationStage.classList.remove('hidden');
+            paymentStage.classList.add('hidden');
+
+            // Populate static data
+            document.getElementById('advance-amount').textContent = ADVANCE_AMOUNT;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('opacity-100'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirmation-modal');
+            modal.classList.remove('opacity-100');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function confirmAcceptance() {
+            const confirmationStage = document.getElementById('modal-confirmation-stage');
+            const paymentStage = document.getElementById('modal-payment-stage');
+
+            // Switch views
+            confirmationStage.classList.add('hidden');
+            paymentStage.classList.remove('hidden');
+            
+            // Render all bank details when switching to payment view
+            renderBankDetails(); 
+        }
+
+        // Reusable copy-to-clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const textToCopy = element.textContent.trim();
+            
+            const copyMessage = document.getElementById('copy-message');
+
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                copyMessage.textContent = `Copied ${element.id.includes('iban') ? 'IBAN' : 'Account Number'} successfully!`;
+                copyMessage.classList.remove('opacity-0', 'text-red-400');
+                copyMessage.classList.add('text-green-400');
+                setTimeout(() => {
+                    copyMessage.classList.add('opacity-0');
+                }, 2000);
+            } catch (err) {
+                copyMessage.textContent = 'Copy failed. Please manually copy the details.';
+                copyMessage.classList.remove('opacity-0', 'text-green-400');
+                copyMessage.classList.add('text-red-400');
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+    </script>
+</head>
+
+<body class="antialiased">
+    <!-- Header -->
+    <header class="sticky-header shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl font-bold tracking-wider">SK <span class="gold-text">PRODUCTIONS</span></span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-sm text-gray-300">
+                <a href="#services" class="hover:text-brand-gold transition">Deliverables</a>
+                <a href="#team" class="hover:text-brand-gold transition">Our Team</a>
+                <a href="#pricing" class="hover:text-brand-gold transition">Quotation</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-7xl mx-auto px-6 sm:px-8 py-20 space-y-24">
+        <!-- Hero -->
+        <section class="text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight animate-fadeIn">CREATIVE SERVICES <span class="gold-text">QUOTATION</span></h1>
+            <p class="mt-6 text-lg sm:text-2xl text-gray-400 font-light animate-fadeIn">FOR OUR PARTNERSHIP WITH <span class="text-white font-medium">MKB STORE</span></p>
+            <div class="w-28 h-1 gold-divider mx-auto mt-6 rounded-full"></div>
+            
+            <!-- Call to Action -->
+            <button onclick="showModal()" class="cta-button mt-12 py-3 px-8 text-base sm:text-lg font-bold rounded-full shadow-lg animate-pulse-gold transform transition duration-300 ease-in-out">
+                APPROVE & ACCEPT QUOTATION
+            </button>
+            <p class="text-xs mt-4 text-gray-500">A confirmation prompt will appear, followed by bank account options.</p>
+        </section>
+
+        <!-- Quotation -->
+        <section id="pricing" class="grid lg:grid-cols-3 gap-10 md:gap-14">
+            <!-- Total Value Card - Visually dominant -->
+            <div class="glass-card p-8 text-center flex flex-col justify-center animate-fadeIn order-1 lg:order-none">
+                <h2 class="text-base font-semibold uppercase tracking-widest text-gray-300">Total Project Value</h2>
+                <p class="text-5xl md:text-6xl font-bold mt-4"><span class="gold-text">110,000 /-</span></p>
+                <p class="text-lg mt-4 pt-4 border-t border-white/10 text-gray-400">
+                    <span class="font-bold text-white">50% ADVANCE</span>
+                    <span class="block text-sm text-brand-gold/80 italic">Required to initiate project (55,000 /-).</span>
+                </p>
+            </div>
+
+            <!-- Resource Breakdown -->
+            <div class="glass-card p-8 lg:col-span-2 animate-fadeIn order-2 lg:order-none">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 gold-text mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 5a2 2 0 00-2 2v3a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2H4zm.5 8a.5.5 0 100 1h11a.5.5 0 100-1h-11z" clip-rule="evenodd" />
+                    </svg>
+                    MKB STUDIOS <span class="text-lg font-light ml-3 text-gray-400">Resource Breakdown</span>
+                </h2>
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div class="p-4 bg-white/5 rounded-lg border border-white/10 flex justify-between items-center transition duration-200 hover:border-brand-gold hover:bg-white/10"><span class="font-medium text-gray-300">SOCIAL MEDIA MANAGER</span><span class="gold-text text-xl font-bold">30k</span></div>
+                    <div class="p-4 bg-white/5 rounded-lg border border-white/10 flex justify-between items-center transition duration-200 hover:border-brand-gold hover:bg-white/10"><span class="font-medium text-gray-300">SOCIAL MEDIA STRATEGIST</span><span class="gold-text text-xl font-bold">45k</span></div>
+                    <div class="p-4 bg-white/5 rounded-lg border border-white/10 flex justify-between items-center transition duration-200 hover:border-brand-gold hover:bg-white/10"><span class="font-medium text-gray-300">PRODUCTION TEAM</span><span class="gold-text text-xl font-bold">35k</span></div>
+                    <div class="p-4 bg-white/5 rounded-lg border border-white/10 flex justify-center items-center col-span-1 sm:col-span-2 text-sm text-gray-500 italic">Total allocation: 110,000 /-</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team -->
+        <section id="team" class="animate-fadeIn">
+            <h2 class="text-3xl font-bold mb-10 text-center"><span class="gold-text">SK PRODUCTIONS</span> CORE TEAM</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 sm:gap-8">
+                <div class="glass-card p-5 text-center hover:bg-brand-gold/10 transition"><p class="text-lg font-semibold gold-text">SAIM MANSOOR KHAN</p><p class="text-sm text-gray-400">Videographer</p></div>
+                <div class="glass-card p-5 text-center hover:bg-brand-gold/10 transition"><p class="text-lg font-semibold gold-text">KHUZAIMA KHURRAM</p><p class="text-sm text-gray-400">Videographer & Editor</p></div>
+                <div class="glass-card p-5 text-center hover:bg-brand-gold/10 transition"><p class="text-lg font-semibold gold-text">HASEEB ALI</p><p class="text-sm text-gray-400">Social Media Manager & Operations Manager</p></div>
+                <div class="glass-card p-5 text-center hover:bg-brand-gold/10 transition"><p class="text-lg font-semibold gold-text">SAAD</p><p class="text-sm text-gray-400">Videographer & Editor</p></div>
+                <div class="glass-card p-5 text-center hover:bg-brand-gold/10 transition"><p class="text-lg font-semibold gold-text">WAJIHA HASAN</p><p class="text-sm text-gray-400">Social Media Strategist</p></div>
+            </div>
+        </section>
+
+        <!-- Deliverables -->
+        <section id="services">
+            <h2 class="text-3xl font-bold mb-10 text-center">MONTHLY <span class="gold-text">DELIVERABLES</span> & SCOPE</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                
+                <!-- Core Content Output -->
+                <div class="glass-card p-6 animate-fadeIn" style="animation-delay: 0.1s;">
+                    <h3 class="text-xl font-bold gold-text mb-4">Core Content Output (5/month)</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li><span class="text-brand-gold mr-2">›</span> Comprehensive Monthly <span class="font-semibold text-white">Content Calendar</span></li>
+                        <li><span class="text-brand-gold mr-2">›</span> <span class="font-semibold text-white">5 Static or Carousel Posts</span> per month</li>
+                        <li><span class="text-brand-gold mr-2">›</span> <span class="font-semibold text-white">5 High Quality Reels</span> per month (Shoot & Edit)</li>
+                        <li><span class="text-brand-gold mr-2">›</span> Reels Thumbnails for the previous posted ones</li>
+                        <li><span class="text-brand-gold mr-2">›</span> Dedicated Creative Asset Folder</li>
+                    </ul>
+                </div>
+
+                <!-- Strategy & Account Optimization -->
+                <div class="glass-card p-6 animate-fadeIn" style="animation-delay: 0.2s;">
+                    <h3 class="text-xl font-bold gold-text mb-4">Strategy & Optimization</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li><span class="text-brand-gold mr-2">›</span> Social Media Account <span class="font-semibold text-white">Activation</span></li>
+                        <li><span class="text-brand-gold mr-2">›</span> <span class="font-semibold text-white">Optimization of Profile</span> (Bio, Visuals, Links)</li>
+                        <li><span class="text-brand-gold mr-2">›</span> Management of <span class="font-semibold text-white">Ads and Campaigns</span></li>
+                        <li><span class="text-brand-gold mr-2">›</span> Monthly Performance <span class="font-semibold text-white">Report & Review</span></li>
+                        <li><span class="text-brand-gold mr-2">›</span> Dedicated Social Media Manager Support</li>
+                    </ul>
+                </div>
+                
+            </div>
+            <!-- Note for clarity -->
+            <p class="text-center text-sm text-gray-500 mt-10">This scope includes content production and full account management for the monthly fee.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-24 py-10 text-center text-gray-500 border-t border-white/5 space-y-2">
+        <p class="text-sm">&copy; 2025 SK Productions. All Rights Reserved.</p>
+        <p class="text-xs">Creative Services Quotation for MKB Store Partnership (110,000 /-).</p>
+    </footer>
+
+    <!-- Custom Confirmation & Payment Modal -->
+    <div id="confirmation-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center transition-opacity duration-300 opacity-0 z-50">
+        <div class="glass-card p-8 w-11/12 max-w-xl text-center transform transition duration-300 scale-100">
+
+            <!-- Stage 1: Confirmation -->
+            <div id="modal-confirmation-stage">
+                <h3 class="text-2xl font-bold gold-text mb-4">Confirm Quotation Acceptance</h3>
+                <p class="text-gray-300 mb-6">By clicking 'Confirm Acceptance', you agree to the terms of service and authorize the initiation of work upon receipt of the **55,000 /- advance payment**.</p>
+                <div class="space-x-4">
+                    <button onclick="closeModal()" class="py-2 px-6 rounded-lg text-white bg-gray-600 hover:bg-gray-700 transition">Cancel</button>
+                    <button onclick="confirmAcceptance()" class="cta-button py-2 px-6 rounded-lg font-semibold hover:opacity-100 transition">Confirm Acceptance</button>
+                </div>
+            </div>
+            
+            <!-- Stage 2: Payment Details (Hidden by default) -->
+            <div id="modal-payment-stage" class="hidden text-left">
+                <h3 class="text-2xl font-bold gold-text mb-4 text-center">Payment Details: Advance Required</h3>
+                <p class="text-center text-gray-400 mb-6">Please choose one of the following accounts to remit the required advance amount to secure the project timeline.</p>
+
+                <!-- Advance Amount Highlight -->
+                <div class="bg-white/10 p-4 rounded-xl mb-6 text-center">
+                    <p class="text-sm uppercase tracking-wider text-gray-400">Advance Amount Due</p>
+                    <p class="text-4xl font-extrabold gold-text mt-1" id="advance-amount">55,000 /-</p>
+                </div>
+
+                <!-- Bank Details List Container (Scrollable) -->
+                <div id="bank-accounts-container" class="bank-list-container space-y-4 pt-2 pb-4">
+                    <!-- Dynamic bank account details will be rendered here by JavaScript -->
+                </div>
+
+                <p id="copy-message" class="text-center text-xs font-semibold mt-4 mb-4 opacity-0 transition-opacity duration-300"></p>
+
+
+                <button onclick="closeModal()" class="w-full mt-2 py-2 px-6 rounded-lg text-white bg-brand-gold/10 border border-brand-gold/50 hover:bg-brand-gold/20 transition">
+                    Done / Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
