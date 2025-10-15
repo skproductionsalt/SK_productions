@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK Productions - Media Retainer Packages</title>
+    <!-- Chosen Palette: Black, Rich Gold, and Pure White (#0A0A0A, #1F2937, #FFBF00, #FFFFFF) -->
+    <!-- Application Structure Plan: The application uses a fixed side-by-side, three-column card layout for direct package comparison. The primary interaction is clicking a "View Breakdown" button on any card, which triggers a custom modal (pop-out message). This modal dynamically displays the line-item cost calculation (Video total, Photo total, Management fee) based on the package's discounted unit rates, ensuring transparent pricing, which was the user's primary goal. The use of a modal simplifies the main layout while providing detailed data on demand. -->
+    <!-- Visualization & Content Choices: Report Info: Three packages with new volumes and varying unit prices based on volume tier. -> Goal: Compare package features and understand unit cost savings. -> Viz/Presentation Method: Three styled HTML/Tailwind cards for features and a custom HTML/Tailwind modal for the financial breakdown. -> Interaction: Click opens modal showing detailed price calculation. -> Justification: The modal effectively contains the secondary, detailed financial data without cluttering the primary comparison view. This directly addresses the user's request for a "pop-out message" showing the breakdown. Library/Method: Vanilla JS for modal and data handling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define Colors for the Theme */
+        :root {
+            --color-black-bg: #0A0A0A;
+            --color-dark-card: #1F2937; /* Darker Gray for Cards */
+            --color-rich-gold: #FFBF00;
+            --color-text-white: #FFFFFF; /* Pure White */
+            --color-text-medium: #9CA3AF; /* Gray-400 */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-black-bg);
+            color: var(--color-text-white); /* Base text color set to White */
+        }
+        .package-card {
+            background-color: var(--color-dark-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-color: #374151; /* Gray-700 subtle border */
+        }
+        .package-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(255, 191, 0, 0.2); /* Gold shadow on hover */
+        }
+        .btn-secondary {
+            background-color: var(--color-dark-card);
+            color: var(--color-rich-gold);
+            border: 1px solid var(--color-rich-gold);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-secondary:hover {
+             background-color: var(--color-rich-gold);
+             color: var(--color-black-bg);
+             border-color: var(--color-rich-gold);
+        }
+        /* Custom Glow Effect for "SK" */
+        .text-glow-gold {
+            color: var(--color-rich-gold);
+            text-shadow: 
+                0 0 5px rgba(255, 191, 0, 0.7),
+                0 0 10px rgba(255, 191, 0, 0.5),
+                0 0 15px rgba(255, 191, 0, 0.3);
+        }
+        /* Modal Styling */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: var(--color-dark-card);
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            color: var(--color-text-white);
+        }
+        /* Utility classes for consistency */
+        .text-gold-accent {
+            color: var(--color-rich-gold);
+        }
+        .text-white-primary {
+            color: var(--color-text-white);
+        }
+        .text-gray-secondary {
+            color: var(--color-text-medium);
+        }
+    </style>
+</head>
+<body class="antialiased text-white-primary">
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-10 md:mb-16">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white-primary tracking-tight"><span class="text-glow-gold">SK</span> Productions</h1>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-secondary">Monthly Media Retainer Packages: Transparency in Pricing</p>
+            <p class="mt-4 max-w-2×l mx-auto text-lg text-gst-secondary">Each project is initated after 50% advance</p>
+        </header>
+
+        <main>
+            <!-- Packages Section -->
+            <section id="packages" class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Package 1: Essential -->
+                <div id="essential" class="package-card p-8 rounded-2xl border-2 border-gray-700 h-full flex flex-col">
+                    <h3 class="text-2xl font-bold text-white-primary">Essential Tier</h3>
+                    <p class="text-gray-secondary mt-2 mb-6 flex-grow">Core content production with zero management oversight, ideal for self-managed social media.</p>
+                    <p class="text-4xl font-extrabold my-4 text-white-primary">PKR 35,000<span class="text-base font-medium text-gray-secondary">/month</span></p>
+                    <ul class="space-y-4 text-white-primary my-8 flex-grow">
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>4 Videos</strong> (Full Production)</li>
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>10 Photo Sessions</strong></li>
+                        <li class="flex items-center"><span class="text-red-400 mr-3">✖</span>Social Media Management</li>
+                    </ul>
+                    <button class="visualize-btn btn-secondary w-full py-3 px-6 rounded-lg font-semibold text-lg" data-package="essential">View Breakdown</button>
+                </div>
+
+                <!-- Package 2: Professional -->
+                <div id="professional" class="package-card p-8 rounded-2xl border-2 border-gray-700 h-full flex flex-col relative">
+                    <div class="absolute top-0 right-8 -translate-y-1/2 bg-white-primary text-gray-900 text-xs font-bold px-3 py-1 rounded-full uppercase">Best Value</div>
+                    <h3 class="text-2xl font-bold text-white-primary">Professional Tier</h3>
+                    <p class="text-gray-secondary mt-2 mb-6 flex-grow">Volume discounts on media plus foundational social media management to keep your channels active.</p>
+                    <p class="text-4xl font-extrabold my-4 text-white-primary">PKR 66,100<span class="text-base font-medium text-gray-secondary">/month</span></p>
+                    <ul class="space-y-4 text-white-primary my-8 flex-grow">
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>8 Videos</strong> (Discounted Unit Rate)</li>
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>15 Photo Sessions</strong></li>
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span>Basic Social Media Management</li>
+                    </ul>
+                     <button class="visualize-btn btn-secondary w-full py-3 px-6 rounded-lg font-semibold text-lg" data-package="professional">View Breakdown</button>
+                </div>
+
+                <!-- Package 3: Ultimate -->
+                <div id="ultimate" class="package-card p-8 rounded-2xl border-2 border-gray-700 h-full flex flex-col">
+                    <h3 class="text-2xl font-bold text-white-primary">Ultimate Tier</h3>
+                    <p class="text-gray-secondary mt-2 mb-6 flex-grow">Maximum volume and premium unit discounts, plus complete management and page automation.</p>
+                    <p class="text-4xl font-extrabold my-4 text-white-primary">PKR 90,000<span class="text-base font-medium text-gray-secondary">/month</span></p>
+                    <ul class="space-y-4 text-white-primary my-8 flex-grow">
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>10 Videos</strong> (Deepest Unit Discount)</li>
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span><strong>20 Photo Sessions</strong></li>
+                        <li class="flex items-center"><span class="text-gold-accent mr-3">✔</span>Complete Social Management & Automation</li>
+                    </ul>
+                     <button class="visualize-btn btn-secondary w-full py-3 px-6 rounded-lg font-semibold text-lg" data-package="ultimate">View Breakdown</button>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-16 text-sm text-gray-secondary">
+            <p>&copy; 2025 SK Productions. All package prices are listed in Pakistani Rupee (PKR).</p>
+        </footer>
+
+    </div>
+
+    <!-- Custom Modal Structure (Hidden by Default) -->
+    <div id="breakdown-modal" class="modal-backdrop hidden">
+        <div class="modal-content w-full max-w-lg p-8 rounded-xl shadow-2xl transform transition-all duration-300">
+            <div class="flex justify-between items-start mb-6">
+                <h2 class="text-2xl font-bold text-white-primary">Price Breakdown for <span id="modal-package-name" class="text-gold-accent"></span></h2>
+                <button id="close-modal" class="text-gray-400 hover:text-white-primary text-3xl font-light leading-none">
+                    &times;
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div id="modal-video-line" class="flex justify-between text-lg border-b pb-2 border-gray-700">
+                    <span class="font-medium text-gray-400">Video Production Cost</span>
+                    <span id="modal-video-cost" class="font-semibold text-white-primary"></span>
+                </div>
+                <div id="modal-photo-line" class="flex justify-between text-lg border-b pb-2 border-gray-700">
+                    <span class="font-medium text-gray-400">Photo Services Cost</span>
+                    <span id="modal-photo-cost" class="font-semibold text-white-primary"></span>
+                </div>
+                <div id="modal-management-line" class="flex justify-between text-lg pb-2 pt-2 border-t border-dashed border-gray-600">
+                    <span class="font-medium text-gray-400">Management / Automation Fee</span>
+                    <span id="modal-management-cost" class="font-semibold text-white-primary"></span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-6 p-4 rounded-lg bg-[#374151] border-2 border-gold-accent">
+                <span class="text-xl font-bold text-white-primary">Monthly Total Investment:</span>
+                <span id="modal-total-cost" class="text-2xl font-extrabold text-gold-accent"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Price analysis and package data
+            const packageData = {
+                essential: {
+                    name: "Essential Tier",
+                    vids: 4,
+                    vidPrice: 5000,
+                    pics: 10,
+                    picPrice: 1500,
+                    mgmt: 0
+                },
+                professional: {
+                    name: "Professional Tier",
+                    vids: 8,
+                    vidPrice: 4200,
+                    pics: 15,
+                    picPrice: 1500,
+                    mgmt: 10000 
+                },
+                ultimate: {
+                    name: "Ultimate Tier",
+                    vids: 10,
+                    vidPrice: 4000,
+                    pics: 20,
+                    picPrice: 1000,
+                    mgmt: 30000 
+                }
+            };
+
+            const visualizeBtns = document.querySelectorAll('.visualize-btn');
+            const modal = document.getElementById('breakdown-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'PKR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+            });
+
+            function calculateAndDisplayBreakdown(packageKey) {
+                const data = packageData[packageKey];
+                
+                const videoTotal = data.vids * data.vidPrice;
+                const photoTotal = data.pics * data.picPrice;
+                const managementTotal = data.mgmt;
+                const grandTotal = videoTotal + photoTotal + managementTotal;
+                
+                // Static description for photo output quantity per session
+                const imagesPerCar = '10–15';
+
+                // Populate Modal Content
+                document.getElementById('modal-package-name').textContent = data.name;
+                
+                // Video Line
+                const videoText = `${currencyFormatter.format(data.vidPrice)} x ${data.vids} Vids`;
+                document.getElementById('modal-video-line').querySelector('span:first-child').textContent = `Video Production Cost (${videoText})`;
+                document.getElementById('modal-video-cost').textContent = currencyFormatter.format(videoTotal);
+
+                // Photo Line
+                // Update text to reflect that the cost is per vehicle/session, yielding multiple images
+                const photoDescription = `${data.pics} Vehicle Photo Sessions (${imagesPerCar} final images per vehicle)`;
+                document.getElementById('modal-photo-line').querySelector('span:first-child').textContent = `Photo Services Cost (${photoDescription})`;
+                document.getElementById('modal-photo-cost').textContent = currencyFormatter.format(photoTotal);
+
+                // Management Line
+                document.getElementById('modal-management-cost').textContent = currencyFormatter.format(managementTotal);
+
+                // Total
+                document.getElementById('modal-total-cost').textContent = currencyFormatter.format(grandTotal);
+
+                // Show Modal
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+
+            visualizeBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const packageKey = e.currentTarget.dataset.package;
+                    calculateAndDisplayBreakdown(packageKey);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                // Close if clicked outside the modal content
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
